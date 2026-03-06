@@ -144,20 +144,16 @@ public class Binary
 
 		int shift = 0;
 
-		for (int ind2 = num2.number.length() - 1; ind2 >= 0; ind2--)
-		{
-			if (num2.number.charAt(ind2) == '1')
-			{
-				String num3 = num1.number;
-
-				// shift left by "shift" bits
-				for (int i = 0; i < shift; i++)
-					num3 = num3 + "0";
-
-				result = Binary.add(result, new Binary(num3));
-			}
-			shift++;
-		}
+		for (int ind2 = num2.number.length() - 1; ind2 >= 0; ind2--) {
+    if (num2.number.charAt(ind2) == '1') {
+        String num3 = num1.number;
+        // prepend zeros instead of append
+        for (int i = 0; i < shift; i++)
+            num3 = "0" + num3;
+        result = Binary.add(result, new Binary(num3));
+    }
+    shift++;
+}
 
 		return result;
 	}
