@@ -139,23 +139,25 @@ public class Binary
 
 	// Multiply
 	public static Binary multiply(Binary num1, Binary num2)
-	{
-		Binary result = new Binary("0");
+{
+    Binary result = new Binary("0");
+    int shift = 0;
 
-		int shift = 0;
-
-		for (int ind2 = num2.number.length() - 1; ind2 >= 0; ind2--) {
-    if (num2.number.charAt(ind2) == '1') {
-        String num3 = num1.number;
-        // prepend zeros instead of append
-        for (int i = 0; i < shift; i++)
-            num3 = "0" + num3;
-        result = Binary.add(result, new Binary(num3));
+    for (int ind2 = num2.number.length() - 1; ind2 >= 0; ind2--) {
+        if (num2.number.charAt(ind2) == '1') {
+            StringBuilder shiftedValue = new StringBuilder(num1.number);
+            
+            // APPEND zeros to the end to shift the value left
+            for (int i = 0; i < shift; i++) {
+                shiftedValue.append("0");
+            }
+            
+            result = Binary.add(result, new Binary(shiftedValue.toString()));
+        }
+        shift++;
     }
-    shift++;
-}
 
-		return result;
-	}
+    return result;
+}
 
 }	
