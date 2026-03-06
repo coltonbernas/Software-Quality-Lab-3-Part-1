@@ -16,32 +16,39 @@ public class BinaryController {
         return "calculator";
 	}
 	
-	@PostMapping("/")
-	public String result(@RequestParam(name="operand1", required=false, defaultValue="") String operand1,
-	@RequestParam(name="operator", required=false, defaultValue="") String operator ,
-	@RequestParam(name="operand2", required=false, defaultValue="") String operand2, Model model) {
-		model.addAttribute("operand1", operand1);
-		model.addAttribute("operator", operator);
-		model.addAttribute("operand2", operand2);
-		Binary number1=new Binary (operand1);
-		Binary number2=new Binary (operand2);
-		switch(operator)
-		{
-			case "+":
-				model.addAttribute("result", Binary.add(number1,number2).getValue());
-				return "result";
-			case "|":
-				model.addAttribute("result", Binary.or(number1,number2).getValue());
-				return "result";
-			case "&":
-				model.addAttribute("result", Binary.and(number1,number2).getValue());
-				return "result";
-			case "*":
-				model.addAttribute("result", Binary.multiply(number1,number1).getValue());
-				return "result";
-			default:
-				return "Error";
-		}
-	}
+	@PostMapping@PostMapping("/")
+public String result(@RequestParam(name="operand1", required=false, defaultValue="") String operand1,
+                     @RequestParam(name="operator", required=false, defaultValue="") String operator,
+                     @RequestParam(name="operand2", required=false, defaultValue="") String operand2,
+                     Model model) {
+
+    model.addAttribute("operand1", operand1);
+    model.addAttribute("operator", operator);
+    model.addAttribute("operand2", operand2);
+
+    if(operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
+        return "Error";
+    }
+
+    Binary number1 = new Binary(operand1);
+    Binary number2 = new Binary(operand2);
+
+    switch(operator) {
+        case "+":
+            model.addAttribute("result", Binary.add(number1,number2).getValue());
+            return "result";
+        case "|":
+            model.addAttribute("result", Binary.or(number1,number2).getValue());
+            return "result";
+        case "&":
+            model.addAttribute("result", Binary.and(number1,number2).getValue());
+            return "result";
+        case "*":
+            model.addAttribute("result", Binary.multiply(number1,number2).getValue()); // fixed
+            return "result";
+        default:
+            return "Error";
+    }
+}
 
 }
