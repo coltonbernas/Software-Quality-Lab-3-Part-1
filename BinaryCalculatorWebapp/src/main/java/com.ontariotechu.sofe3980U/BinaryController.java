@@ -9,51 +9,56 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class BinaryController {
 
-	@GetMapping("/")
-	public String getCalculator(@RequestParam(name="operand1", required=false, defaultValue="") String operand1, Model model) {
-		model.addAttribute("operand1", operand1);
-		model.addAttribute("operand1Focused", operand1.length()>0);
-        return "Error";
-	}
-	
-	@PostMapping("/")
-public String result(@RequestParam(name="operand1", required=false, defaultValue="") String operand1,
-                     @RequestParam(name="operator", required=false, defaultValue="") String operator,
-                     @RequestParam(name="operand2", required=false, defaultValue="") String operand2,
-                     Model model) {
-
-    model.addAttribute("operand1", operand1);
-    model.addAttribute("operator", operator);
-    model.addAttribute("operand2", operand2);
-
-    // If parameters are missing, don't crash or go to a separate error page
-    // Just return the main calculator view so the user can try again
-    if (operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
-        return "Error"; 
+    @GetMapping("/")
+    public String getCalculator(@RequestParam(name="operand1", required=false, defaultValue="") String operand1, Model model) {
+        model.addAttribute("operand1", operand1);
+        model.addAttribute("operand1Focused", operand1.length() > 0);
+        
+        // FIX 1: This should return "calculator", not "Error"
+        // This is why getDefault and getParameter are failing.
+        return "calculator";
     }
+    
+    @PostMapping("/")
+    public String result(@RequestParam(name="operand1", required=false, defaultValue="") String operand1,
+                         @RequestParam(name="operator", required=false, defaultValue="") String operator,
+                         @RequestParam(name="operand2", required=false, defaultValue="") String operand2,
+                         Model model) {
 
-    Binary number1 = new Binary(operand1);
-    Binary number2 = new Binary(operand2);
-    String resultValue = "";
+        // FIX 2: Always ensure all attributes are present to prevent Thymeleaf from crashing
+        model.addAttribute("operand1", operand1);
+        model.addAttribute("operator", operator);
+        model.addAttribute("operand2", operand2);
+        model.addAttribute("result", ""); // Default empty result
 
-    switch(operator) {
-        case "+":
-            resultValue = Binary.add(number1, number2).getValue();
-            break;
-        case "|":
-            resultValue = Binary.or(number1, number2).getValue();
-            break;
-        case "&":
-            resultValue = Binary.and(number1, number2).getValue();
-            break;
-        case "*":
-            resultValue = Binary.multiply(number1, number2).getValue();
-            break;
-        default:
-            return "calculator";
+        // If parameters are missing, return the Error view
+        if (operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
+            return "Error"; 
+        }
+
+        Binary number1 = new Binary(operand1);
+        Binary number2 = new Binary(operand2);
+        String resultValue = "";
+
+        switch(operator) {
+            case "+":
+                resultValue = Binary.add(number1, number2).getValue();
+                break;
+            case "|":
+                resultValue = Binary.or(number1, number2).getValue();
+                break;
+            case "&":
+                resultValue = Binary.and(number1, number2).getValue();
+                break;
+            case "*":
+                resultValue = Binary.multiply(number1, number2).getValue();
+                break;
+            default:
+                return "Error"; // Consistent error handling
+        }
+
+        model.addAttribute("result", resultValue);
+        return "result";
     }
+}
 
-    model.addAttribute("result", resultValue);
-    return "result";
-}
-}
