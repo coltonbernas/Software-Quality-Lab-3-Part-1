@@ -96,7 +96,7 @@ public class BinaryControllerTest {
                         .param("operand2","1100"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("result"))
-                .andExpect(model().attribute("result", "1100100"))
+                .andExpect(model().attribute("result", "1111000"))
                 .andExpect(model().attribute("operand1", "1010"));
     }
 
