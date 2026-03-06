@@ -30,7 +30,7 @@ public String result(@RequestParam(name="operand1", required=false, defaultValue
 
     // Match the filename "error.html" exactly
     if (operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
-        return "error"; 
+        return "Error"; 
     }
 
     try {
@@ -52,14 +52,14 @@ public String result(@RequestParam(name="operand1", required=false, defaultValue
                 resultValue = Binary.multiply(number1, number2).getValue();
                 break;
             default:
-                return "error"; // Changed to lowercase
+                return "Error"; // Changed to lowercase
         }
 
         model.addAttribute("result", resultValue);
         return "result";
         
     } catch (Exception e) {
-        return "error"; // Changed to lowercase
+        return "Error"; // Changed to lowercase
     }
 }
 }
