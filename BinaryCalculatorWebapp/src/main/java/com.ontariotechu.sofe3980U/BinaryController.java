@@ -29,7 +29,7 @@ public String result(@RequestParam(name="operand1", required=false, defaultValue
     // If parameters are missing, don't crash or go to a separate error page
     // Just return the main calculator view so the user can try again
     if (operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
-        return "calculator"; 
+        return "Error"; 
     }
 
     Binary number1 = new Binary(operand1);
