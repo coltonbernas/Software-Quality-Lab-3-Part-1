@@ -26,29 +26,30 @@ public String result(@RequestParam(name="operand1", required=false, defaultValue
     model.addAttribute("operator", operator);
     model.addAttribute("operand2", operand2);
 
-    if(operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
-        return "Error";
+    // 1️⃣ Check for empty parameters
+    if (operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
+        return "Error"; // Return Error view instead of throwing
     }
 
+    // 2️⃣ Create Binary objects only if parameters are valid
     Binary number1 = new Binary(operand1);
     Binary number2 = new Binary(operand2);
 
     switch(operator) {
         case "+":
-            model.addAttribute("result", Binary.add(number1,number2).getValue());
+            model.addAttribute("result", Binary.add(number1, number2).getValue());
             return "result";
         case "|":
-            model.addAttribute("result", Binary.or(number1,number2).getValue());
+            model.addAttribute("result", Binary.or(number1, number2).getValue());
             return "result";
         case "&":
-            model.addAttribute("result", Binary.and(number1,number2).getValue());
+            model.addAttribute("result", Binary.and(number1, number2).getValue());
             return "result";
         case "*":
-            model.addAttribute("result", Binary.multiply(number1,number2).getValue()); // fixed
+            model.addAttribute("result", Binary.multiply(number1, number2).getValue()); // fixed
             return "result";
         default:
             return "Error";
     }
 }
-
 }
