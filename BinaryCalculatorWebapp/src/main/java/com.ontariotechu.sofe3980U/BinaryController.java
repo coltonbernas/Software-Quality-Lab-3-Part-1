@@ -26,30 +26,34 @@ public String result(@RequestParam(name="operand1", required=false, defaultValue
     model.addAttribute("operator", operator);
     model.addAttribute("operand2", operand2);
 
-    // 1️⃣ Check for empty parameters
+    // If parameters are missing, don't crash or go to a separate error page
+    // Just return the main calculator view so the user can try again
     if (operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
-        return "Error"; // Return Error view instead of throwing
+        return "calculator"; 
     }
 
-    // 2️⃣ Create Binary objects only if parameters are valid
     Binary number1 = new Binary(operand1);
     Binary number2 = new Binary(operand2);
+    String resultValue = "";
 
     switch(operator) {
         case "+":
-            model.addAttribute("result", Binary.add(number1, number2).getValue());
-            return "result";
+            resultValue = Binary.add(number1, number2).getValue();
+            break;
         case "|":
-            model.addAttribute("result", Binary.or(number1, number2).getValue());
-            return "result";
+            resultValue = Binary.or(number1, number2).getValue();
+            break;
         case "&":
-            model.addAttribute("result", Binary.and(number1, number2).getValue());
-            return "result";
+            resultValue = Binary.and(number1, number2).getValue();
+            break;
         case "*":
-            model.addAttribute("result", Binary.multiply(number1, number2).getValue()); // fixed
-            return "result";
+            resultValue = Binary.multiply(number1, number2).getValue();
+            break;
         default:
-            return "Error";
+            return "calculator";
     }
+
+    model.addAttribute("result", resultValue);
+    return "result";
 }
 }
