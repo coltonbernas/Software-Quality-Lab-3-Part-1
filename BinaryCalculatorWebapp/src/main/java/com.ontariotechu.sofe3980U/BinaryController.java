@@ -14,51 +14,49 @@ public class BinaryController {
         model.addAttribute("operand1", operand1);
         model.addAttribute("operand1Focused", operand1.length() > 0);
         
-        // FIX 1: This should return "calculator", not "Error"
-        // This is why getDefault and getParameter are failing.
         return "calculator";
     }
     
     @PostMapping("/")
-    public String result(@RequestParam(name="operand1", required=false, defaultValue="") String operand1,
-                         @RequestParam(name="operator", required=false, defaultValue="") String operator,
-                         @RequestParam(name="operand2", required=false, defaultValue="") String operand2,
-                         Model model) {
+public String result(@RequestParam(name="operand1", required=false, defaultValue="") String operand1,
+                     @RequestParam(name="operator", required=false, defaultValue="") String operator,
+                     @RequestParam(name="operand2", required=false, defaultValue="") String operand2,
+                     Model model) {
 
-        // FIX 2: Always ensure all attributes are present to prevent Thymeleaf from crashing
-        model.addAttribute("operand1", operand1);
-        model.addAttribute("operator", operator);
-        model.addAttribute("operand2", operand2);
-        model.addAttribute("result", ""); // Default empty result
+    model.addAttribute("operand1", operand1);
+    model.addAttribute("operator", operator);
+    model.addAttribute("operand2", operand2);
+    model.addAttribute("result", ""); 
 
-        // If parameters are missing, return the Error view
-        if (operand1.isEmpty() || operand2.isEmpty() || operator.isEmpty()) {
-            return "Error"; 
-        }
-
-        Binary number1 = new Binary(operand1);
-        Binary number2 = new Binary(operand2);
-        String resultValue = "";
-
-        switch(operator) {
-            case "+":
-                resultValue = Binary.add(number1, number2).getValue();
-                break;
-            case "|":
-                resultValue = Binary.or(number1, number2).getValue();
-                break;
-            case "&":
-                resultValue = Binary.and(number1, number2).getValue();
-                break;
-            case "*":
-                resultValue = Binary.multiply(number1, number2).getValue();
-                break;
-            default:
-                return "Error"; // Consistent error handling
-        }
-
-        model.addAttribute("result", resultValue);
-        return "result";
+    if (operand1 == null || operand1.isEmpty() || 
+        operand2 == null || operand2.isEmpty() || 
+        operator == null || operator.isEmpty()) {
+        return "Error"; 
     }
+
+    Binary number1 = new Binary(operand1);
+    Binary number2 = new Binary(operand2);
+    String resultValue = "";
+
+    switch(operator) {
+        case "+":
+            resultValue = Binary.add(number1, number2).getValue();
+            break;
+        case "|":
+            resultValue = Binary.or(number1, number2).getValue();
+            break;
+        case "&":
+            resultValue = Binary.and(number1, number2).getValue();
+            break;
+        case "*":
+            resultValue = Binary.multiply(number1, number2).getValue();
+            break;
+        default:
+            return "Error";
+    }
+
+    model.addAttribute("result", resultValue);
+    return "result";
+}
 }
 
